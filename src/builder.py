@@ -1,12 +1,12 @@
 import os
-from ellcurve.ellcurve import Curve
+from curve.curve import Curve
 from typing import List
 
 class EllCurveRefBuilder:
 
+    curves: List[Curve]
     uRes: int
     vRes: int
-    curves: List[Curve]
 
     def __init__(self, curves: List[Curve], uRes: int, vRes: int):
         self.curves = curves
@@ -14,4 +14,5 @@ class EllCurveRefBuilder:
         self.vRes = vRes
 
     def build(self, output_path: str):
-        f = open("result")
+        os.remove(output_path)
+        f = open(output_path)

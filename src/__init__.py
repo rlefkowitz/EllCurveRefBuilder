@@ -1,3 +1,3 @@
 print(f'Invoking __init__.py for {__name__}')
 
-__all__ = ['ellcurve', 'builder']
+__all__ = ['curve', 'builder']

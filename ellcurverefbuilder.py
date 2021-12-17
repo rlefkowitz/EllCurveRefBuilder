@@ -1,5 +1,5 @@
 from src.builder import EllCurveRefBuilder
-from src.ellcurve.ellcurve import Curve
+from src.curve.curve import Curve
 from typing import List
 import numpy as np
 

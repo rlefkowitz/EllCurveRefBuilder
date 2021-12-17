@@ -46,6 +46,8 @@ def CreateCurve(o2w, w2o, reverseOrientation, c, w0, w1, e0, e1, a0, a1, norm, s
 
 
 def CreateCurveShape(o2w, w2o, reverseOrieintation, params):
+
+
     width = params["width"] if "width" in params else 1.
     width0 = params["width0"] if "width0" in params else width
     width1 = params["width1"] if "width1" in params else width
@@ -57,84 +59,98 @@ def CreateCurveShape(o2w, w2o, reverseOrieintation, params):
     ang = params["ang"] if "ang" in params else 0.
     ang0 = params["ang0"] if "ang0" in params else ang
     ang1 = params["ang1"] if "ang1" in params else ang
-
-    degree = params["degree"] if "degree" in params else 3
-
-    basis = params["basis"] if "basis" in params else "bezier"
-
-    ncp = [0]
     cp = params["P"]
-    ncp[0] = len(cp)
-    nSegments = 0
-    if basis == "bezier":
-        nSegments = int((ncp[0] - 1) / degree)
-    else:
-        nSegments = int(ncp[0] - degree)
 
-    nnorm = [0]
-    n = params["N"] if "N" in params else None
-    nnorm[0] = len(n) if n else 0
-    sd = params["splitdepth"] if "splitdepth" in params else int(
-        params["splitdepth"] if "splitdepth" in params else 3)
+    curve = CreateCurve(o2w, w2o, reverseOrieintation, cp, width0, width1, ecc0, ecc1, ang0, ang1)
+    # width = params["width"] if "width" in params else 1.
+    # width0 = params["width0"] if "width0" in params else width
+    # width1 = params["width1"] if "width1" in params else width
 
-    curves = []
-    cpBase = cp
-    for seg in range(nSegments):
-        segCpBezier = [None] * 4
+    # ecc = params["ecc"] if "ecc" in params else 0.
+    # ecc0 = params["ecc0"] if "ecc0" in params else ecc
+    # ecc1 = params["ecc1"] if "ecc1" in params else ecc
 
-        if basis == "bezier":
-            if degree == 2:
-                segCpBezier[0] = cpBase[0]
-                segCpBezier[1] = Lerp(2. / 3., cpBase[0], cpBase[1])
-                segCpBezier[2] = Lerp(1. / 3., cpBase[1], cpBase[2])
-                segCpBezier[3] = cpBase[2]
-            else:
-                for i in range(4):
-                    segCpBezier[i] = cpBase[i]
-            cpBase = cpBase[degree:]
-        else:
-            if degree == 2:
-                p01 = cpBase[0]
-                p12 = cpBase[1]
-                p23 = cpBase[2]
+    # ang = params["ang"] if "ang" in params else 0.
+    # ang0 = params["ang0"] if "ang0" in params else ang
+    # ang1 = params["ang1"] if "ang1" in params else ang
 
-                p11 = Lerp(0.5, p01, p12)
-                p22 = Lerp(0.5, p12, p23)
+    # degree = params["degree"] if "degree" in params else 3
 
-                segCpBezier[0] = p11
-                segCpBezier[1] = Lerp(2. / 3., p11, p12)
-                segCpBezier[2] = Lerp(1. / 3., p12, p22)
-                segCpBezier[3] = p22
-            else:
-                p012 = cpBase[0]
-                p123 = cpBase[1]
-                p234 = cpBase[2]
-                p345 = cpBase[3]
+    # basis = params["basis"] if "basis" in params else "bezier"
 
-                p122 = Lerp(2. / 3., p012, p123)
-                p223 = Lerp(1. / 3., p123, p234)
-                p233 = Lerp(2. / 3., p123, p234)
-                p334 = Lerp(1. / 3., p234, p345)
+    # ncp = [0]
+    # cp = params["P"]
+    # ncp[0] = len(cp)
+    # nSegments = 0
+    # if basis == "bezier":
+    #     nSegments = int((ncp[0] - 1) / degree)
+    # else:
+    #     nSegments = int(ncp[0] - degree)
 
-                p222 = Lerp(0.5, p122, p223)
-                p333 = Lerp(0.5, p233, p334)
+    # nnorm = [0]
+    # n = params["N"] if "N" in params else None
+    # nnorm[0] = len(n) if n else 0
+    # sd = params["splitdepth"] if "splitdepth" in params else int(
+    #     params["splitdepth"] if "splitdepth" in params else 3)
 
-                segCpBezier[0] = p222
-                segCpBezier[1] = p223
-                segCpBezier[2] = p233
-                segCpBezier[3] = p333
-            cpBase += 1
+    # curves = []
+    # cpBase = cp
+    # for seg in range(nSegments):
+    #     segCpBezier = [None] * 4
 
-        c = CreateCurve(o2w, w2o, reverseOrieintation, segCpBezier,
-                        Lerp(float(seg) / float(nSegments), width0, width1),
-                        Lerp(float(seg + 1) / float(nSegments), width0, width1),
-                        Lerp(float(seg) / float(nSegments), ecc0, ecc1),
-                        Lerp(float(seg + 1) / float(nSegments), ecc0, ecc1),
-                        Lerp(float(seg) / float(nSegments), ang0, ang1),
-                        Lerp(float(seg + 1) / float(nSegments), ang0, ang1),
-                        n[seg:] if n else None, sd)
-        curves += c
-    return curves
+    #     if basis == "bezier":
+    #         if degree == 2:
+    #             segCpBezier[0] = cpBase[0]
+    #             segCpBezier[1] = Lerp(2. / 3., cpBase[0], cpBase[1])
+    #             segCpBezier[2] = Lerp(1. / 3., cpBase[1], cpBase[2])
+    #             segCpBezier[3] = cpBase[2]
+    #         else:
+    #             for i in range(4):
+    #                 segCpBezier[i] = cpBase[i]
+    #         cpBase = cpBase[degree:]
+    #     else:
+    #         if degree == 2:
+    #             p01 = cpBase[0]
+    #             p12 = cpBase[1]
+    #             p23 = cpBase[2]
+
+    #             p11 = Lerp(0.5, p01, p12)
+    #             p22 = Lerp(0.5, p12, p23)
+
+    #             segCpBezier[0] = p11
+    #             segCpBezier[1] = Lerp(2. / 3., p11, p12)
+    #             segCpBezier[2] = Lerp(1. / 3., p12, p22)
+    #             segCpBezier[3] = p22
+    #         else:
+    #             p012 = cpBase[0]
+    #             p123 = cpBase[1]
+    #             p234 = cpBase[2]
+    #             p345 = cpBase[3]
+
+    #             p122 = Lerp(2. / 3., p012, p123)
+    #             p223 = Lerp(1. / 3., p123, p234)
+    #             p233 = Lerp(2. / 3., p123, p234)
+    #             p334 = Lerp(1. / 3., p234, p345)
+
+    #             p222 = Lerp(0.5, p122, p223)
+    #             p333 = Lerp(0.5, p233, p334)
+
+    #             segCpBezier[0] = p222
+    #             segCpBezier[1] = p223
+    #             segCpBezier[2] = p233
+    #             segCpBezier[3] = p333
+    #         cpBase += 1
+
+    #     c = CreateCurve(o2w, w2o, reverseOrieintation, segCpBezier,
+    #                     Lerp(float(seg) / float(nSegments), width0, width1),
+    #                     Lerp(float(seg + 1) / float(nSegments), width0, width1),
+    #                     Lerp(float(seg) / float(nSegments), ecc0, ecc1),
+    #                     Lerp(float(seg + 1) / float(nSegments), ecc0, ecc1),
+    #                     Lerp(float(seg) / float(nSegments), ang0, ang1),
+    #                     Lerp(float(seg + 1) / float(nSegments), ang0, ang1),
+    #                     n[seg:] if n else None, sd)
+    #     curves += c
+    # return curves
 
 
 class CurveCommon:
